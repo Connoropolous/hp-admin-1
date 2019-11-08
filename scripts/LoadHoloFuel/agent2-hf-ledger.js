@@ -18,7 +18,7 @@ const txProfliferator = (iterNum) => {
   const transactionList = []
   for (let i = 0; i < iterNum; i++) {
     const transaction = {
-      counterparty: 'SHOULD BECOME AGENT 2',
+      counterparty: 'SHOULD BECOME AGENT 1',
       amount: amount(),
       notes: notes(),
       deadline: deadline()
@@ -28,13 +28,11 @@ const txProfliferator = (iterNum) => {
   return transactionList
 }
 
-const Agent1TransactionLedger = {
-  requests: txProfliferator(8),
+const Agent2TransactionLedger = {
+  requests: txProfliferator(4),
   offers: {
-    initated: txProfliferator(4),
-    reponding: [{}],
-    accepted: [{}]
+    initated: txProfliferator(2)
   }
 }
 
-module.exports = Agent1TransactionLedger
+module.exports = Agent2TransactionLedger

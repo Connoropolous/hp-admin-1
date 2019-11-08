@@ -3,9 +3,11 @@ import { render, fireEvent, act } from '@testing-library/react'
 import wait from 'waait'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
-
-// testing the named export Header rather than the default export which is wrapped in withRouter
 import MyProfile from './MyProfile'
+
+jest.mock('components/layout/PrimaryLayout')
+// TODO: switch to mock pattern for Router
+jest.unmock('react-router-dom')
 
 const renderMyProfile = (
   props,
@@ -23,12 +25,6 @@ const renderMyProfile = (
 })
 
 describe('Rendering', () => {
-  it('should render the header', () => {
-    const { getByText } = renderMyProfile()
-
-    expect(getByText('Edit Profile')).toBeInTheDocument()
-  })
-
   it('should render the avatar url input', async () => {
     const { getByLabelText } = renderMyProfile()
     const input = getByLabelText('Avatar URL')
@@ -43,19 +39,19 @@ describe('Rendering', () => {
     expect(input).toBeInTheDocument()
   })
 
-  it('should render the email input', async () => {
-    const { getByLabelText } = renderMyProfile()
-    const input = getByLabelText('Email')
+  // it('should render the email input', async () => {
+  //   const { getByLabelText } = renderMyProfile()
+  //   const input = getByLabelText('Email')
 
-    expect(input).toBeInTheDocument()
-  })
+  //   expect(input).toBeInTheDocument()
+  // })
 
-  it('should render the password input', async () => {
-    const { getByLabelText } = renderMyProfile()
-    const input = getByLabelText('Password')
+  // it('should render the password input', async () => {
+  //   const { getByLabelText } = renderMyProfile()
+  //   const input = getByLabelText('Password')
 
-    expect(input).toBeInTheDocument()
-  })
+  //   expect(input).toBeInTheDocument()
+  // })
 
   it('should render the submit button', async () => {
     const { getByText } = renderMyProfile()
@@ -84,55 +80,55 @@ describe('Validation', () => {
     expect(pushSpy).not.toHaveBeenCalled()
   })
 
-  it('should reject empty email', async () => {
-    const pushSpy = jest.fn()
-    const { getByLabelText, getByText } = renderMyProfile({
-      history: { push: pushSpy }
-    })
-    const input = getByLabelText('Email')
-    fireEvent.change(input, { target: { value: '' } })
+  // it('should reject empty email', async () => {
+  //   const pushSpy = jest.fn()
+  //   const { getByLabelText, getByText } = renderMyProfile({
+  //     history: { push: pushSpy }
+  //   })
+  //   const input = getByLabelText('Email')
+  //   fireEvent.change(input, { target: { value: '' } })
 
-    await act(async () => {
-      fireEvent.click(getByText('Save Changes'))
-      await wait(0)
-    })
+  //   await act(async () => {
+  //     fireEvent.click(getByText('Save Changes'))
+  //     await wait(0)
+  //   })
 
-    const error = getByText('You need to provide a valid email address.')
-    expect(error).toBeInTheDocument()
-    expect(pushSpy).not.toHaveBeenCalled()
-  })
+  //   const error = getByText('You need to provide a valid email address.')
+  //   expect(error).toBeInTheDocument()
+  //   expect(pushSpy).not.toHaveBeenCalled()
+  // })
 
-  it('should reject incorrect email', async () => {
-    const pushSpy = jest.fn()
-    const { getByLabelText, getByText } = renderMyProfile({
-      history: { push: pushSpy }
-    })
-    const input = getByLabelText('Email')
-    fireEvent.change(input, { target: { value: 'some value' } })
+  // it('should reject incorrect email', async () => {
+  //   const pushSpy = jest.fn()
+  //   const { getByLabelText, getByText } = renderMyProfile({
+  //     history: { push: pushSpy }
+  //   })
+  //   const input = getByLabelText('Email')
+  //   fireEvent.change(input, { target: { value: 'some value' } })
 
-    await act(async () => {
-      fireEvent.click(getByText('Save Changes'))
-      await wait(0)
-    })
+  //   await act(async () => {
+  //     fireEvent.click(getByText('Save Changes'))
+  //     await wait(0)
+  //   })
 
-    const error = getByText('You need to provide a valid email address.')
-    expect(error).toBeInTheDocument()
-    expect(pushSpy).not.toHaveBeenCalled()
-  })
+  //   const error = getByText('You need to provide a valid email address.')
+  //   expect(error).toBeInTheDocument()
+  //   expect(pushSpy).not.toHaveBeenCalled()
+  // })
 
-  it('should not show error for correct email', async () => {
-    const { getByLabelText, getByText, queryByText } = renderMyProfile()
-    const input = getByLabelText('Email')
-    fireEvent.change(input, { target: { value: 'alice@example.com' } })
+  // it('should not show error for correct email', async () => {
+  //   const { getByLabelText, getByText, queryByText } = renderMyProfile()
+  //   const input = getByLabelText('Email')
+  //   fireEvent.change(input, { target: { value: 'alice@example.com' } })
 
-    await act(async () => {
-      fireEvent.click(getByText('Save Changes'))
-      await wait(0)
-    })
+  //   await act(async () => {
+  //     fireEvent.click(getByText('Save Changes'))
+  //     await wait(0)
+  //   })
 
-    const error = queryByText('You need to provide a valid email address.')
-    expect(error).not.toBeInTheDocument()
-  })
+  //   const error = queryByText('You need to provide a valid email address.')
+  //   expect(error).not.toBeInTheDocument()
+  // })
 
   it('should not show error for name when provided', async () => {
     const { getByLabelText, getByText, queryByText } = renderMyProfile()
