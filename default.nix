@@ -187,6 +187,10 @@ in
         instances = flatten(map multiInterfaceInstanceConfig dnas);
       }
     ];
+    network = {
+      sim2h_url = "wss://sim2h.holochain.org:9000";
+      type = "sim2h";
+    };
     logger = {
       type = "debug";
       rules.rules = [
